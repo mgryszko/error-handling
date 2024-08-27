@@ -1,0 +1,17 @@
+{
+  "name": "error-handling",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "^1.1.8"
+  },
+  "peerDependencies": {
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "error-handling": ".",
+    "monet": "^0.9.3",
+    "neverthrow": "^7.0.1",
+    "ts-pattern": "^5.3.1"
+  }
+}
