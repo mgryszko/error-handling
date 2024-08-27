@@ -23,6 +23,7 @@ process.stdout.write("Type a name (try 'a name' to throw): ");
 // This makes the code easier to maintain and extend, as all error-related logic is in one place.
 // It also makes it clear how each type of error is being handled without needing to trace through multiple try-catch blocks scattered throughout the code.
 
+// --- Centralized Error Handling ---
 const defaultErrorHandler = (error: InputError) => {
 	return match(error)
 		.with(P.instanceOf(TooShortError), (error) => {
@@ -44,19 +45,19 @@ const defaultErrorHandler = (error: InputError) => {
 };
 
 for await (const line of console) {
-	// MonetJS
+	// --- MonetJS ---
 	const monetString = monetHello(line).fold(
 		defaultErrorHandler,
 		(ok) => `${ok}!`,
 	);
 
-	// Neverthrow
+	// --- Neverthrow ---
 	const neverThrowString = neverthrowHello(line).match(
 		(ok) => `${ok}!`,
 		defaultErrorHandler,
 	);
 
-	// Try-catch 🫠
+	// --- Try-catch 🫠 ---
 	let throwString = "";
 
 	try {
@@ -67,6 +68,7 @@ for await (const line of console) {
 		throwString = "";
 	}
 
+	// --- OUTPUT ---
 	console.log(`from monet: ${monetString}`);
 	console.log(`from neverthrow: ${neverThrowString}`);
 	console.log(`from try-catch: ${throwString}`);
