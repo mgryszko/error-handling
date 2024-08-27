@@ -1,31 +1,24 @@
 import { Either } from "monet";
-import { match } from "ts-pattern";
+import {
+	NameError,
+	TooLongError,
+	TooShortError,
+	type InputError,
+} from "./Errors";
 
-type FunctionError = { type: "TooShort" } | { type: "TooLong" };
-
-const errorFunction = (name: string): Either<FunctionError, string> => {
+// Passing return type is technically optional, but it will result in a more readable type.
+export const monetHello = (name: string): Either<InputError, string> => {
 	if (name.length < 1) {
-		return Either.left({ type: "TooShort" });
+		return Either.left(new TooShortError());
 	}
 
 	if (name.length > 10) {
-		return Either.left({ type: "TooLong" });
+		return Either.left(new TooLongError(name));
+	}
+
+	if (name === "a name") {
+		return Either.left(new NameError());
 	}
 
 	return Either.right(`Hello ${name}`);
 };
-
-const showName = () => {
-	errorFunction("neverthrow").fold(
-		(error) =>
-			match(error)
-				.with({ type: "TooShort" }, () => "Hello Anonymous")
-				.with({ type: "TooLong" }, () => {
-					throw new Error("Name is too long"); // Not recoverable
-				})
-				.exhaustive(),
-		(ok) => `${ok}!`,
-	);
-};
-
-showName();

@@ -1,17 +1,17 @@
-const errorFunction = (name: string) => {
+import { NameError, TooLongError, TooShortError } from "./Errors";
+
+export const throwHello = (name: string) => {
 	if (name.length < 1) {
-		throw new Error("Input must be greater than 1");
+		throw new TooShortError();
+	}
+
+	if (name.length > 10) {
+		throw new TooLongError(name);
+	}
+
+	if (name === "a name") {
+		throw new NameError();
 	}
 
 	return `Hello ${name}`;
 };
-
-const showName = () => {
-	try {
-		console.log(errorFunction("try catch"));
-	} catch (error: unknown) {
-		console.log("Hello Anonymous");
-	}
-};
-
-showName();

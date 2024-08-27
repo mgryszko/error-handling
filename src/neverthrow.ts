@@ -1,31 +1,24 @@
 import { err, ok, type Result } from "neverthrow";
-import { match } from "ts-pattern";
+import {
+	NameError,
+	TooLongError,
+	TooShortError,
+	type InputError,
+} from "./Errors";
 
-type FunctionError = { type: "TooShort" } | { type: "TooLong" };
-
-const errorFunction = (name: string): Result<string, FunctionError> => {
+// Passing return type is technically optional, but it will result in a more readable type.
+export const neverthrowHello = (name: string): Result<string, InputError> => {
 	if (name.length < 1) {
-		return err({ type: "TooShort" });
+		return err(new TooShortError());
 	}
 
 	if (name.length > 10) {
-		return err({ type: "TooLong" });
+		return err(new TooLongError(name));
+	}
+
+	if (name === "a name") {
+		return err(new NameError());
 	}
 
 	return ok(`Hello ${name}`);
 };
-
-const showName = () => {
-	errorFunction("neverthrow").match(
-		(ok) => `${ok}!`,
-		(error) =>
-			match(error)
-				.with({ type: "TooShort" }, () => "Hello Anonymous")
-				.with({ type: "TooLong" }, () => {
-					throw new Error("Name is too long"); // Not recoverable
-				})
-				.exhaustive(),
-	);
-};
-
-showName();
