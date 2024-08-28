@@ -22,3 +22,7 @@ export const monetHello = (name: string): Either<InputError, string> => {
 
 	return Either.right(`Hello ${name}`);
 };
+
+export const monetHelloAsync = async (name: string): Promise<Either<InputError, string>> => {
+	return Promise.resolve(monetHello(name));
+};

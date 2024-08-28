@@ -1,4 +1,4 @@
-import { err, ok, type Result } from "neverthrow";
+import {err, errAsync, ok, okAsync, type Result, ResultAsync} from "neverthrow";
 import {
 	NameError,
 	TooLongError,
@@ -22,3 +22,7 @@ export const neverthrowHello = (name: string): Result<string, InputError> => {
 
 	return ok(`Hello ${name}`);
 };
+
+export const neverthrowHelloAsync = (name: string): ResultAsync<string, InputError> => {
+	return neverthrowHello(name).match(okAsync, errAsync);
+}

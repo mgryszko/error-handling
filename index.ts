@@ -1,6 +1,6 @@
 import { match, P } from "ts-pattern";
-import { monetHello } from "./src/monet";
-import { neverthrowHello } from "./src/neverthrow";
+import {monetHello, monetHelloAsync} from "./src/monet";
+import {neverthrowHello, neverthrowHelloAsync} from "./src/neverthrow";
 import {
 	NameError,
 	TooLongError,
@@ -46,13 +46,13 @@ const defaultErrorHandler = (error: InputError) => {
 
 for await (const line of console) {
 	// --- MonetJS ---
-	const monetString = monetHello(line).fold(
+	const monetString = (await monetHelloAsync(line)).fold(
 		defaultErrorHandler,
 		(ok) => `${ok}!`,
 	);
 
 	// --- Neverthrow ---
-	const neverThrowString = neverthrowHello(line).match(
+	const neverThrowString = await neverthrowHelloAsync(line).match(
 		(ok) => `${ok}!`,
 		defaultErrorHandler,
 	);
